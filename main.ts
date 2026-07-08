@@ -444,7 +444,6 @@ level: ${totalLevel}
 background: "${background}"
 alignment: "${alignment}"
 xp: ${char.currentXp ?? 0}
-hp_max: ${hp.max}
 hp: ${hp.max}
 modifier: ${Math.floor((rawStats.dex - 10) / 2)}
 hp_current: ${hp.current}
