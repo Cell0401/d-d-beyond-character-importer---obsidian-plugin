@@ -968,7 +968,7 @@ class ImportModal extends Modal {
 			}
 		});
 
-		const btnRow = contentEl.createEl("div", { cls: "dndbi-import-btn-row" });
+		const btnRow = contentEl.createDiv({ cls: "dndbi-import-btn-row" });
 
 		const cancelBtn = btnRow.createEl("button", { text: "Cancel" });
 		cancelBtn.addEventListener("click", () => this.close());
@@ -1023,15 +1023,15 @@ class HPTrackerModal extends Modal {
 		const tracker: { maxHp: number; currentHp: number; tempHp: number } = trackerEntry;
 
 		// ── HP Display ───────────────────────────────────────────────────────
-		const displayEl = contentEl.createEl("div", { cls: "dndbi-hpmodal-display" });
+		const displayEl = contentEl.createDiv({ cls: "dndbi-hpmodal-display" });
 
-		const hpBarEl = displayEl.createEl("div", { cls: "dndbi-hpmodal-bar-wrap" });
+		const hpBarEl = displayEl.createDiv({ cls: "dndbi-hpmodal-bar-wrap" });
 
-		const hpFillEl = hpBarEl.createEl("div", { cls: "dndbi-hpmodal-bar-fill" });
+		const hpFillEl = hpBarEl.createDiv({ cls: "dndbi-hpmodal-bar-fill" });
 
-		const hpTextEl = displayEl.createEl("div", { cls: "dndbi-hpmodal-text" });
+		const hpTextEl = displayEl.createDiv({ cls: "dndbi-hpmodal-text" });
 
-		const tempEl = displayEl.createEl("div", { cls: "dndbi-hpmodal-temp" });
+		const tempEl = displayEl.createDiv({ cls: "dndbi-hpmodal-temp" });
 
 		const updateDisplay = () => {
 			const total = tracker.currentHp + tracker.tempHp;
@@ -1053,7 +1053,7 @@ class HPTrackerModal extends Modal {
 		// ── Current HP Controls ──────────────────────────────────────────────
 		contentEl.createEl("h3", { text: "Current HP" });
 
-		const currentCtrlEl = contentEl.createEl("div", { cls: "dndbi-hpmodal-ctrl-row" });
+		const currentCtrlEl = contentEl.createDiv({ cls: "dndbi-hpmodal-ctrl-row" });
 
 		const currentInputEl = currentCtrlEl.createEl("input", {
 			cls: "dndbi-hpmodal-number-input",
@@ -1100,7 +1100,7 @@ class HPTrackerModal extends Modal {
 		// ── Temporary HP Controls ────────────────────────────────────────────
 		contentEl.createEl("h3", { text: "Temporary HP" });
 
-		const tempCtrlEl = contentEl.createEl("div", { cls: "dndbi-hpmodal-ctrl-row" });
+		const tempCtrlEl = contentEl.createDiv({ cls: "dndbi-hpmodal-ctrl-row" });
 
 		const tempInputEl = tempCtrlEl.createEl("input", {
 			cls: "dndbi-hpmodal-number-input",
@@ -1125,7 +1125,7 @@ class HPTrackerModal extends Modal {
 		// ── Max HP Setup ─────────────────────────────────────────────────────
 		contentEl.createEl("h3", { text: "Max HP" });
 
-		const maxCtrlEl = contentEl.createEl("div", { cls: "dndbi-hpmodal-ctrl-row" });
+		const maxCtrlEl = contentEl.createDiv({ cls: "dndbi-hpmodal-ctrl-row" });
 
 		const maxInputEl = maxCtrlEl.createEl("input", {
 			cls: "dndbi-hpmodal-number-input",
@@ -1183,13 +1183,13 @@ class DiceRollerModal extends Modal {
 			{ label: "d100", sides: 100 },
 		];
 
-		const btnGrid = contentEl.createEl("div", { cls: "dndbi-dice-btn-grid" });
+		const btnGrid = contentEl.createDiv({ cls: "dndbi-dice-btn-grid" });
 
 		// ── Result display ───────────────────────────────────────────────────
-		const resultEl = contentEl.createEl("div", { cls: "dndbi-dice-result" });
+		const resultEl = contentEl.createDiv({ cls: "dndbi-dice-result" });
 		resultEl.setText("—");
 
-		const subtitleEl = contentEl.createEl("div", { cls: "dndbi-dice-subtitle" });
+		const subtitleEl = contentEl.createDiv({ cls: "dndbi-dice-subtitle" });
 
 		for (const die of dice) {
 			const btn = btnGrid.createEl("button", {
@@ -1224,7 +1224,7 @@ class DiceRollerModal extends Modal {
 		contentEl.createEl("h3", { text: "Roll History" });
 
 		// ── History controls (filter, export, stats) ────────────────────────
-		const controlsEl = contentEl.createEl("div", { cls: "dndbi-dice-controls" });
+		const controlsEl = contentEl.createDiv({ cls: "dndbi-dice-controls" });
 
 		const filterLabel = controlsEl.createEl("label", { cls: "dndbi-dice-filter-label" });
 		filterLabel.setText("Filter:");
@@ -1249,10 +1249,10 @@ class DiceRollerModal extends Modal {
 		});
 
 		// ── History display ─────────────────────────────────────────────────
-		this.historyEl = contentEl.createEl("div", { cls: "dndbi-dice-history" });
+		this.historyEl = contentEl.createDiv({ cls: "dndbi-dice-history" });
 
 		// ── Statistics section ───────────────────────────────────────────────
-		this.statsEl = contentEl.createEl("div", { cls: "dndbi-dice-stats" });
+		this.statsEl = contentEl.createDiv({ cls: "dndbi-dice-stats" });
 
 		const clearBtn = contentEl.createEl("button", { text: "Clear History", cls: "dndbi-dice-clear-btn" });
 		clearBtn.addEventListener("click", () => {
@@ -1273,19 +1273,19 @@ class DiceRollerModal extends Modal {
 
 		this.historyEl.empty();
 		if (filtered.length === 0) {
-			this.historyEl.createEl("div", {
+			this.historyEl.createDiv({
 				text: "No rolls yet.",
 				cls: "dndbi-dice-history-empty",
 			});
 		} else {
 			for (const entry of filtered) {
-				const row = this.historyEl.createEl("div", { cls: "dndbi-dice-history-row" });
+				const row = this.historyEl.createDiv({ cls: "dndbi-dice-history-row" });
 				const entryModStr = entry.modifier >= 0 ? `+${entry.modifier}` : `${entry.modifier}`;
 				const entryTotal = entry.result + entry.modifier;
-				row.createEl("span", {
+				row.createSpan({
 					text: `🎲 ${entry.label}: ${entry.die}(${entry.result})${entry.modifier !== 0 ? entryModStr : ""} = ${entryTotal}`,
 				});
-				row.createEl("span", {
+				row.createSpan({
 					text: entry.timestamp,
 					cls: "dndbi-dice-history-ts",
 				});
@@ -1523,15 +1523,15 @@ class FullCharacterSheetModal extends Modal {
 		if (!this.rollLogEl) return;
 		this.rollLogEl.empty();
 		if (this.rollLog.length === 0) {
-			const empty = this.rollLogEl.createEl("div", { text: "No rolls yet." });
+			const empty = this.rollLogEl.createDiv({ text: "No rolls yet." });
 			empty.addClass("dndbi-cs-roll-empty");
 			return;
 		}
 		for (const entry of this.rollLog) {
-			const row = this.rollLogEl.createEl("div");
+			const row = this.rollLogEl.createDiv();
 			row.addClass("dndbi-cs-roll-row");
-			row.createEl("span").setText(entry.text);
-			const ts = row.createEl("span");
+			row.createSpan().setText(entry.text);
+			const ts = row.createSpan();
 			ts.setText(entry.ts);
 			ts.addClass("dndbi-cs-roll-ts");
 		}
@@ -1564,25 +1564,25 @@ class FullCharacterSheetModal extends Modal {
 	// ── Section builders ─────────────────────────────────────────────────────
 
 	private sectionEl(parent: HTMLElement, title: string): HTMLElement {
-		const wrap = parent.createEl("div");
+		const wrap = parent.createDiv();
 		wrap.addClass("dndbi-cs-section");
-		const hdr = wrap.createEl("div");
+		const hdr = wrap.createDiv();
 		hdr.addClass("dndbi-cs-section-hdr");
 		hdr.setText(title);
 		return wrap;
 	}
 
 	private pill(parent: HTMLElement, label: string, value: string, sub?: string): void {
-		const p = parent.createEl("div");
+		const p = parent.createDiv();
 		p.addClass("dndbi-cs-pill");
-		const lbl = p.createEl("div");
+		const lbl = p.createDiv();
 		lbl.setText(label);
 		lbl.addClass("dndbi-cs-pill-label");
-		const val = p.createEl("div");
+		const val = p.createDiv();
 		val.setText(value);
 		val.addClass("dndbi-cs-pill-value");
 		if (sub) {
-			const s = p.createEl("div");
+			const s = p.createDiv();
 			s.setText(sub);
 			s.addClass("dndbi-cs-pill-sub");
 		}
@@ -1602,7 +1602,7 @@ class FullCharacterSheetModal extends Modal {
 	// from D&D Beyond (advantage / none / disadvantage), not just the
 	// advantage/disadvantage cases.
 	private advBadge(parent: HTMLElement, advState: AdvState): HTMLElement {
-		const badge = parent.createEl("span");
+		const badge = parent.createSpan();
 		const variant = advState === "advantage" ? "is-advantage" : advState === "disadvantage" ? "is-disadvantage" : "is-none";
 		badge.setText(advState === "advantage" ? "▲A" : advState === "disadvantage" ? "▼D" : "–N");
 		badge.addClass("dndbi-cs-adv-badge", variant);
@@ -1635,19 +1635,19 @@ class FullCharacterSheetModal extends Modal {
 		const allMods = getAllModifiers(char);
 
 		// ── Layout: two columns on wide, single on narrow ────────────────────
-		const root = contentEl.createEl("div");
+		const root = contentEl.createDiv();
 		root.addClass("dndbi-cs-root");
 
-		const mainCol = root.createEl("div");
+		const mainCol = root.createDiv();
 		mainCol.addClass("dndbi-cs-main-col");
 
-		const sideCol = root.createEl("div");
+		const sideCol = root.createDiv();
 		sideCol.addClass("dndbi-cs-side-col");
 
 		// ════════════════════════════════════════════════════════════════════
 		// HEADER
 		// ════════════════════════════════════════════════════════════════════
-		const header = mainCol.createEl("div");
+		const header = mainCol.createDiv();
 		header.addClass("dndbi-cs-header");
 
 		if (char.avatarUrl) {
@@ -1656,11 +1656,11 @@ class FullCharacterSheetModal extends Modal {
 			avatar.addClass("dndbi-cs-avatar");
 		}
 
-		const headerText = header.createEl("div");
-		const nameEl = headerText.createEl("div");
+		const headerText = header.createDiv();
+		const nameEl = headerText.createDiv();
 		nameEl.setText(char.name ?? "Unknown");
 		nameEl.addClass("dndbi-cs-char-name");
-		const subEl = headerText.createEl("div");
+		const subEl = headerText.createDiv();
 		subEl.setText(`${classString} • ${raceName} • Level ${totalLevel}`);
 		subEl.addClass("dndbi-cs-char-sub");
 
@@ -1673,7 +1673,7 @@ class FullCharacterSheetModal extends Modal {
 		// CORE STATS ROW
 		// ════════════════════════════════════════════════════════════════════
 		const coreSection = this.sectionEl(mainCol, "Core Stats");
-		const coreRow = coreSection.createEl("div");
+		const coreRow = coreSection.createDiv();
 		coreRow.addClass("dndbi-cs-core-row");
 		this.pill(coreRow, "HP", `${hpState.current}/${hpState.max}`, hpState.temp > 0 ? `+${hpState.temp} temp` : undefined);
 		this.pill(coreRow, "AC", String(ac));
@@ -1685,18 +1685,18 @@ class FullCharacterSheetModal extends Modal {
 		// HP TRACKER (inline in sheet)
 		// ════════════════════════════════════════════════════════════════════
 		const hpSection = this.sectionEl(mainCol, "HP Tracker");
-		const hpWrap = hpSection.createEl("div");
+		const hpWrap = hpSection.createDiv();
 		hpWrap.addClass("dndbi-cs-hp-wrap");
 
 		// HP bar
-		const barWrap = hpWrap.createEl("div");
+		const barWrap = hpWrap.createDiv();
 		barWrap.addClass("dndbi-hp-bar-wrap");
-		const barFill = barWrap.createEl("div");
+		const barFill = barWrap.createDiv();
 		barFill.addClass("dndbi-hp-bar-fill");
-		const barLbl = barWrap.createEl("div");
+		const barLbl = barWrap.createDiv();
 		barLbl.addClass("dndbi-hp-bar-label");
 
-		let hpSt = { ...hpState };
+		const hpSt = { ...hpState };
 
 		const dsSPips: HTMLElement[] = [];
 		const dsFPips: HTMLElement[] = [];
@@ -1726,7 +1726,7 @@ class FullCharacterSheetModal extends Modal {
 		};
 
 		// dmg/heal row
-		const dmgRow = hpWrap.createEl("div");
+		const dmgRow = hpWrap.createDiv();
 		dmgRow.addClass("dndbi-cs-dmg-row");
 		const amtInput = dmgRow.createEl("input", {
 			cls: "dndbi-cs-amt-input",
@@ -1752,7 +1752,7 @@ class FullCharacterSheetModal extends Modal {
 		});
 
 		// quick buttons
-		const quickRow = hpWrap.createEl("div");
+		const quickRow = hpWrap.createDiv();
 		quickRow.addClass("dndbi-cs-quick-row");
 		const qBtn = (lbl: string, d: number) => {
 			const b = quickRow.createEl("button"); b.setText(lbl);
@@ -1767,9 +1767,9 @@ class FullCharacterSheetModal extends Modal {
 		qBtn("−10",-10); qBtn("−5",-5); qBtn("−1",-1); qBtn("Full",0); qBtn("+1",1); qBtn("+5",5); qBtn("+10",10);
 
 		// temp HP row
-		const tmpRow = hpWrap.createEl("div");
+		const tmpRow = hpWrap.createDiv();
 		tmpRow.addClass("dndbi-cs-tmp-row");
-		const tmpLbl = tmpRow.createEl("span"); tmpLbl.setText("Temp HP:"); tmpLbl.addClass("dndbi-cs-tmp-lbl");
+		const tmpLbl = tmpRow.createSpan(); tmpLbl.setText("Temp HP:"); tmpLbl.addClass("dndbi-cs-tmp-lbl");
 		const tmpInput = tmpRow.createEl("input", {
 			cls: "dndbi-cs-tmp-input",
 			attr: { type: "number", min: "0", value: String(hpSt.temp) },
@@ -1782,7 +1782,7 @@ class FullCharacterSheetModal extends Modal {
 		clrTmpBtn.addEventListener("click", () => { hpSt.temp=0; tmpInput.value="0"; addHPLog("💙 Temp HP cleared"); renderHP(); });
 
 		// death saves
-		const dsSect = hpWrap.createEl("div");
+		const dsSect = hpWrap.createDiv();
 		dsSect.addClass("dndbi-cs-ds-sect");
 
 		const makePips = (
@@ -1791,7 +1791,7 @@ class FullCharacterSheetModal extends Modal {
 			get: () => number,
 			set: (n: number) => void,
 		) => {
-			const grp = dsSect.createEl("div"); grp.addClass("dndbi-cs-ds-grp");
+			const grp = dsSect.createDiv(); grp.addClass("dndbi-cs-ds-grp");
 			for (let i = 1; i <= 3; i++) {
 				const p = grp.createEl("button");
 				const pipIndex = i;
@@ -1812,7 +1812,7 @@ class FullCharacterSheetModal extends Modal {
 		// ABILITY SCORES
 		// ════════════════════════════════════════════════════════════════════
 		const abilSection = this.sectionEl(mainCol, "Ability Scores");
-		const abilGrid = abilSection.createEl("div");
+		const abilGrid = abilSection.createDiv();
 		abilGrid.addClass("dndbi-cs-abil-grid");
 
 		const abilDefs: Array<{ key: keyof typeof stats; label: string }> = [
@@ -1824,22 +1824,22 @@ class FullCharacterSheetModal extends Modal {
 		for (const { key, label } of abilDefs) {
 			const score = stats[key];
 			const modNum = this.mod(score);
-			const card = abilGrid.createEl("div");
+			const card = abilGrid.createDiv();
 			card.addClass("dndbi-cs-abil-card");
 			card.addEventListener("mouseenter", () => { card.addClass("dndbi-cs-abil-card--hover"); });
 			card.addEventListener("mouseleave", () => { card.removeClass("dndbi-cs-abil-card--hover"); });
 			card.addEventListener("click", () => this.rollD20(modNum, `${label} Check`));
-			const lbl = card.createEl("div"); lbl.setText(label); lbl.addClass("dndbi-cs-abil-lbl");
-			const scoreEl = card.createEl("div"); scoreEl.setText(String(score)); scoreEl.addClass("dndbi-cs-abil-score");
-			const modEl = card.createEl("div"); modEl.setText(this.modStr(modNum)); modEl.addClass("dndbi-cs-abil-mod");
-			const hint = card.createEl("div"); hint.setText("click to roll"); hint.addClass("dndbi-cs-abil-hint");
+			const lbl = card.createDiv(); lbl.setText(label); lbl.addClass("dndbi-cs-abil-lbl");
+			const scoreEl = card.createDiv(); scoreEl.setText(String(score)); scoreEl.addClass("dndbi-cs-abil-score");
+			const modEl = card.createDiv(); modEl.setText(this.modStr(modNum)); modEl.addClass("dndbi-cs-abil-mod");
+			const hint = card.createDiv(); hint.setText("click to roll"); hint.addClass("dndbi-cs-abil-hint");
 		}
 
 		// ════════════════════════════════════════════════════════════════════
 		// SAVING THROWS
 		// ════════════════════════════════════════════════════════════════════
 		const saveSection = this.sectionEl(mainCol, "Saving Throws");
-		const saveGrid = saveSection.createEl("div");
+		const saveGrid = saveSection.createDiv();
 		saveGrid.addClass("dndbi-cs-save-grid");
 
 		const saveDefs: Array<{ key: keyof typeof stats; label: string; subType: string }> = [
@@ -1854,13 +1854,13 @@ class FullCharacterSheetModal extends Modal {
 		for (const { key, label, subType } of saveDefs) {
 			const isProficient = allMods.some((m) => m.type === "proficiency" && m.subType === subType);
 			const modNum = this.mod(stats[key]) + (isProficient ? pb : 0);
-			const row = saveGrid.createEl("div");
+			const row = saveGrid.createDiv();
 			row.addClass("dndbi-cs-save-row");
-			const left = row.createEl("div"); left.addClass("dndbi-cs-save-left");
-			const dot = left.createEl("span");
+			const left = row.createDiv(); left.addClass("dndbi-cs-save-left");
+			const dot = left.createSpan();
 			dot.setText(isProficient ? "●" : "○");
 			dot.addClass(isProficient ? "dndbi-cs-dot--prof" : "dndbi-cs-dot--none");
-			const _lbl = left.createEl("span"); _lbl.setText(label); _lbl.addClass("dndbi-cs-save-lbl");
+			const _lbl = left.createSpan(); _lbl.setText(label); _lbl.addClass("dndbi-cs-save-lbl");
 			const advState = getAdvantageState(allMods, subType, "saving-throws");
 			this.advBadge(left, advState);
 			this.rollBtn(row, `${label} Save`, modNum);
@@ -1870,7 +1870,7 @@ class FullCharacterSheetModal extends Modal {
 		// SKILLS
 		// ════════════════════════════════════════════════════════════════════
 		const skillSection = this.sectionEl(mainCol, "Skills");
-		const skillGrid = skillSection.createEl("div");
+		const skillGrid = skillSection.createDiv();
 		skillGrid.addClass("dndbi-cs-skill-grid");
 
 		const skillDefs: Array<{ label: string; key: keyof typeof stats; subType: string }> = [
@@ -1898,13 +1898,13 @@ class FullCharacterSheetModal extends Modal {
 			const isProficient = allMods.some((m) => m.type === "proficiency" && m.subType === subType);
 			const isExpertise  = allMods.some((m) => m.type === "expertise"   && m.subType === subType);
 			const bonus = this.mod(stats[key]) + (isExpertise ? pb * 2 : isProficient ? pb : 0);
-			const row = skillGrid.createEl("div");
+			const row = skillGrid.createDiv();
 			row.addClass("dndbi-cs-skill-row");
-			const left = row.createEl("div"); left.addClass("dndbi-cs-save-left");
-			const dot = left.createEl("span");
+			const left = row.createDiv(); left.addClass("dndbi-cs-save-left");
+			const dot = left.createSpan();
 			dot.setText(isExpertise ? "★" : isProficient ? "●" : "○");
 			dot.addClass(isExpertise ? "dndbi-cs-dot--expert" : isProficient ? "dndbi-cs-dot--prof" : "dndbi-cs-dot--none");
-			const _lbl = left.createEl("span"); _lbl.setText(label); _lbl.addClass("dndbi-cs-skill-lbl");
+			const _lbl = left.createSpan(); _lbl.setText(label); _lbl.addClass("dndbi-cs-skill-lbl");
 			const advState = getAdvantageState(allMods, subType, "ability-checks");
 			this.advBadge(left, advState);
 			this.rollBtn(row, `${label} Check`, bonus);
@@ -1917,13 +1917,13 @@ class FullCharacterSheetModal extends Modal {
 		if (actions.length) {
 			const actSection = this.sectionEl(mainCol, "Actions & Attacks");
 			for (const action of actions) {
-				const row = actSection.createEl("div");
+				const row = actSection.createDiv();
 				row.addClass("dndbi-cs-action-row");
-				const nameEl = row.createEl("span");
+				const nameEl = row.createSpan();
 				nameEl.setText(`${action.isSpell ? "✨" : "⚔️"} ${action.name}`);
 				nameEl.addClass("dndbi-cs-action-name");
 				if (action.notes) {
-					const notesEl = row.createEl("span"); notesEl.setText(action.notes);
+					const notesEl = row.createSpan(); notesEl.setText(action.notes);
 					notesEl.addClass("dndbi-cs-action-notes");
 				}
 				if (action.attackBonus != null) {
@@ -1982,16 +1982,16 @@ class FullCharacterSheetModal extends Modal {
 					} catch { return {}; }
 				};
 				const saveSlots = (d: Record<number, number>) => this.plugin.pluginState.set(slotKey, JSON.stringify(d));
-				let usedSlots: Record<number, number> = loadSlots();
+				const usedSlots: Record<number, number> = loadSlots();
 
 				for (const slot of usefulSlots) {
 					const lvl = slot.level ?? 0;
 					const maxPips = slot.max ?? 0;
-					const slotRow = slotSection.createEl("div");
+					const slotRow = slotSection.createDiv();
 					slotRow.addClass("dndbi-cs-slot-row");
-					const lvlLbl = slotRow.createEl("span"); lvlLbl.setText(`Level ${lvl}`);
+					const lvlLbl = slotRow.createSpan(); lvlLbl.setText(`Level ${lvl}`);
 					lvlLbl.addClass("dndbi-cs-slot-lbl");
-					const pipsEl = slotRow.createEl("div"); pipsEl.addClass("dndbi-cs-slot-pips");
+					const pipsEl = slotRow.createDiv(); pipsEl.addClass("dndbi-cs-slot-pips");
 					const restBtn = slotRow.createEl("button"); restBtn.setText("Rest");
 					restBtn.addClass("dndbi-cs-slot-rest-btn");
 
@@ -2037,28 +2037,28 @@ class FullCharacterSheetModal extends Modal {
 			const levelNames = ["Cantrips","1st","2nd","3rd","4th","5th","6th","7th","8th","9th"];
 
 			for (const [lvl, spells] of [...byLevel.entries()].sort((a,b) => a[0]-b[0])) {
-				const lvlHdr = spellSection.createEl("div"); lvlHdr.setText(levelNames[lvl] ?? `Level ${lvl}`);
+				const lvlHdr = spellSection.createDiv(); lvlHdr.setText(levelNames[lvl] ?? `Level ${lvl}`);
 				lvlHdr.addClass("dndbi-cs-spell-lvl-hdr");
 				for (const spell of spells) {
 					const def = spell.definition; if (!def) continue;
-					const sRow = spellSection.createEl("div");
+					const sRow = spellSection.createDiv();
 					sRow.addClass("dndbi-cs-spell-row");
 					sRow.addEventListener("mouseenter", () => { sRow.addClass("dndbi-cs-spell-row--hover"); });
 					sRow.addEventListener("mouseleave", () => { sRow.removeClass("dndbi-cs-spell-row--hover"); });
 
-					const prepDot = sRow.createEl("span"); prepDot.setText(spell.prepared ? "●" : "○");
+					const prepDot = sRow.createSpan(); prepDot.setText(spell.prepared ? "●" : "○");
 					prepDot.addClass(spell.prepared ? "dndbi-cs-dot--prof" : "dndbi-cs-dot--none");
 					prepDot.addClass("dndbi-cs-spell-prep-dot");
-					const spellName = sRow.createEl("span"); spellName.setText(def.name ?? "Unknown");
+					const spellName = sRow.createSpan(); spellName.setText(def.name ?? "Unknown");
 					spellName.addClass("dndbi-cs-spell-name");
-					const school = sRow.createEl("span"); school.setText(def.school ?? "");
+					const school = sRow.createSpan(); school.setText(def.school ?? "");
 					school.addClass("dndbi-cs-spell-school");
 					if (def.concentration) {
-						const conc = sRow.createEl("span"); conc.setText("C");
+						const conc = sRow.createSpan(); conc.setText("C");
 						conc.addClass("dndbi-cs-spell-conc");
 					}
 
-					const descEl = spellSection.createEl("div");
+					const descEl = spellSection.createDiv();
 					descEl.addClass("dndbi-cs-spell-desc");
 					let expanded = false;
 					let fetched = false;
@@ -2103,14 +2103,14 @@ class FullCharacterSheetModal extends Modal {
 				} catch { return {}; }
 			};
 			const saveEq = (d: Record<string, boolean>) => this.plugin.pluginState.set(eqKey, JSON.stringify(d));
-			let eqState: Record<string, boolean> = loadEq();
+			const eqState: Record<string, boolean> = loadEq();
 
 			for (const item of inventory) {
 				const def = item.definition; if (!def) continue;
 				const itemKey = (def.name ?? "unknown").toLowerCase().replace(/\s+/g, "-");
 				if (!(itemKey in eqState)) eqState[itemKey] = item.equipped ?? false;
 
-				const iRow = eqSection.createEl("div");
+				const iRow = eqSection.createDiv();
 				iRow.addClass("dndbi-cs-eq-row");
 				const toggle = iRow.createEl("button");
 				const renderToggle = () => {
@@ -2122,12 +2122,12 @@ class FullCharacterSheetModal extends Modal {
 				toggle.addEventListener("click", () => { eqState[itemKey] = !eqState[itemKey]; saveEq(eqState); renderToggle(); });
 				renderToggle();
 
-				const itemName = iRow.createEl("span"); itemName.setText(def.name ?? "Unknown");
+				const itemName = iRow.createSpan(); itemName.setText(def.name ?? "Unknown");
 				itemName.addClass("dndbi-cs-eq-name");
-				const qty = iRow.createEl("span"); qty.setText(`×${item.quantity ?? 1}`);
+				const qty = iRow.createSpan(); qty.setText(`×${item.quantity ?? 1}`);
 				qty.addClass("dndbi-cs-eq-qty");
 				if (def.weight) {
-					const wt = iRow.createEl("span"); wt.setText(`${def.weight} lb`);
+					const wt = iRow.createSpan(); wt.setText(`${def.weight} lb`);
 					wt.addClass("dndbi-cs-eq-wt");
 				}
 
@@ -2158,14 +2158,14 @@ class FullCharacterSheetModal extends Modal {
 			const featSection = this.sectionEl(mainCol, "Features & Traits");
 
 			const makeFeat = (name: string, rawDesc: string | undefined, fetchType: "classfeature" | "races") => {
-				const card = featSection.createEl("div");
+				const card = featSection.createDiv();
 				card.addClass("dndbi-cs-feat-card");
-				const hdr = card.createEl("div");
+				const hdr = card.createDiv();
 				hdr.addClass("dndbi-cs-feat-hdr");
-				const hdrSpan = hdr.createEl("span"); hdrSpan.setText(name); hdrSpan.addClass("dndbi-cs-feat-hdr-name");
-				const chevron = hdr.createEl("span"); chevron.setText("▶"); chevron.addClass("dndbi-cs-feat-chevron");
+				const hdrSpan = hdr.createSpan(); hdrSpan.setText(name); hdrSpan.addClass("dndbi-cs-feat-hdr-name");
+				const chevron = hdr.createSpan(); chevron.setText("▶"); chevron.addClass("dndbi-cs-feat-chevron");
 
-				const body = card.createEl("div");
+				const body = card.createDiv();
 				body.addClass("dndbi-cs-feat-body");
 
 				let expanded = false; let fetched = false;
@@ -2222,7 +2222,7 @@ class FullCharacterSheetModal extends Modal {
 		const classFeatureSection = this.sectionEl(mainCol, "Class Features");
 		for (const cls of char.classes ?? []) {
 			const className = cls.definition?.name ?? "Unknown";
-			const clsHdr = classFeatureSection.createEl("div"); clsHdr.setText(`${className} (Level ${cls.level ?? 0})`);
+			const clsHdr = classFeatureSection.createDiv(); clsHdr.setText(`${className} (Level ${cls.level ?? 0})`);
 			clsHdr.addClass("dndbi-cs-cls-hdr");
 		}
 
@@ -2244,7 +2244,7 @@ class FullCharacterSheetModal extends Modal {
 		const clearRollBtn = rollSection.createEl("button"); clearRollBtn.setText("Clear");
 		clearRollBtn.addClass("dndbi-cs-roll-clr-btn");
 		clearRollBtn.addEventListener("click", () => { this.rollLog = []; this.refreshRollLog(); });
-		const rollLogContainer = rollSection.createEl("div");
+		const rollLogContainer = rollSection.createDiv();
 		rollLogContainer.addClass("dndbi-cs-roll-log");
 		this.rollLogEl = rollLogContainer;
 		this.refreshRollLog();
@@ -2253,13 +2253,13 @@ class FullCharacterSheetModal extends Modal {
 		const curr = char.currencies;
 		if (curr) {
 			const currSection = this.sectionEl(sideCol, "Currency");
-			const currRow = currSection.createEl("div"); currRow.addClass("dndbi-cs-curr-row");
+			const currRow = currSection.createDiv(); currRow.addClass("dndbi-cs-curr-row");
 			const coin = (lbl: string, val: number, colorClass: string) => {
-				const c = currRow.createEl("div");
+				const c = currRow.createDiv();
 					c.addClass("dndbi-cs-coin");
 					c.addClass(colorClass);
-				const cv = c.createEl("span"); cv.setText(String(val)); cv.addClass("dndbi-cs-coin-val");
-				const cl = c.createEl("span"); cl.setText(lbl); cl.addClass("dndbi-cs-coin-lbl");
+				const cv = c.createSpan(); cv.setText(String(val)); cv.addClass("dndbi-cs-coin-val");
+				const cl = c.createSpan(); cl.setText(lbl); cl.addClass("dndbi-cs-coin-lbl");
 			};
 			coin("CP", curr.cp ?? 0, "dndbi-cs-coin--cp");
 			coin("SP", curr.sp ?? 0, "dndbi-cs-coin--sp");
@@ -2275,16 +2275,16 @@ class FullCharacterSheetModal extends Modal {
 			.map((m) => m.friendlySubtypeName ?? "")
 			.filter((v, i, a) => v && a.indexOf(v) === i);
 		if (profNames.length) {
-			const profList = profSection.createEl("div"); profList.addClass("dndbi-cs-prof-list");
+			const profList = profSection.createDiv(); profList.addClass("dndbi-cs-prof-list");
 			profNames.forEach((p) => {
-				const chip = profList.createEl("span"); chip.setText(p);
+				const chip = profList.createSpan(); chip.setText(p);
 				chip.addClass("dndbi-cs-prof-chip");
 			});
 		}
 
 		// 5etools status badge
 		if (this.plugin.pluginSettings.fiveEtoolsEnabled) {
-			const badge = sideCol.createEl("div");
+			const badge = sideCol.createDiv();
 			badge.addClass("dndbi-cs-5e-badge");
 			badge.setText(`📖 5etools: ${this.plugin.pluginSettings.fiveEtoolsBaseUrl}`);
 		}
@@ -2306,7 +2306,7 @@ class FiveEDataModal extends Modal {
 	}
 	onOpen(): void {
 		this.contentEl.createEl("h3", { text: this.title });
-		const pre = this.contentEl.createEl("div", { cls: "dndbi-5e-modal-content" });
+		const pre = this.contentEl.createDiv({ cls: "dndbi-5e-modal-content" });
 		pre.setText(this.content);
 	}
 	onClose(): void { this.contentEl.empty(); }
@@ -2437,97 +2437,6 @@ class DnDBeyondSettingTab extends PluginSettingTab {
 		];
 	}
 
-	display(): void {
-		const { containerEl } = this;
-		containerEl.empty();
-
-		new Setting(containerEl)
-			.setName("Output folder")
-			.setDesc("Vault folder where character notes are saved (leave blank for vault root).")
-			.addText((text) =>
-				text
-					.setPlaceholder("Characters")
-					.setValue(this.plugin.pluginSettings.outputFolder)
-					.onChange((value) => {
-						this.plugin.pluginSettings.outputFolder = value;
-						void this.plugin.saveSettings();
-					})
-			);
-
-		new Setting(containerEl)
-			.setName("Include spells")
-			.setDesc("Import the full spell list and spell slots.")
-			.addToggle((toggle) =>
-				toggle
-					.setValue(this.plugin.pluginSettings.includeSpells)
-					.onChange((value) => {
-						this.plugin.pluginSettings.includeSpells = value;
-						void this.plugin.saveSettings();
-					})
-			);
-
-		new Setting(containerEl)
-			.setName("Include equipment")
-			.setDesc("Import the inventory / equipment table.")
-			.addToggle((toggle) =>
-				toggle
-					.setValue(this.plugin.pluginSettings.includeEquipment)
-					.onChange((value) => {
-						this.plugin.pluginSettings.includeEquipment = value;
-						void this.plugin.saveSettings();
-					})
-			);
-
-		new Setting(containerEl)
-			.setName("Include features & traits")
-			.setDesc("Import racial traits, feats and character personality traits.")
-			.addToggle((toggle) =>
-				toggle
-					.setValue(this.plugin.pluginSettings.includeFeatures)
-					.onChange((value) => {
-						this.plugin.pluginSettings.includeFeatures = value;
-						void this.plugin.saveSettings();
-					})
-			);
-
-		new Setting(containerEl)
-			.setName("Include backstory & notes")
-			.setDesc("Import character backstory and campaign notes from D&D Beyond.")
-			.addToggle((toggle) =>
-				toggle
-					.setValue(this.plugin.pluginSettings.includeBackstory)
-					.onChange((value) => {
-						this.plugin.pluginSettings.includeBackstory = value;
-						void this.plugin.saveSettings();
-					})
-			);
-
-		// ── 5etools integration ─────────────────────────────────────────────────
-		new Setting(containerEl)
-			.setName("Enable 5etools integration")
-			.setDesc("Fetch rich descriptions for spells, items, class features, and racial traits from your self-hosted 5etools instance. Disabled by default.")
-			.addToggle((toggle) =>
-				toggle
-					.setValue(this.plugin.pluginSettings.fiveEtoolsEnabled)
-					.onChange((value) => {
-						this.plugin.pluginSettings.fiveEtoolsEnabled = value;
-						void this.plugin.saveSettings();
-					})
-			);
-
-		new Setting(containerEl)
-			.setName("5etools base URL")
-			.setDesc("Base URL of your self-hosted 5etools instance (e.g. https://5e.tools or http://localhost:5000). Only used when the integration is enabled.")
-			.addText((text) =>
-				text
-					.setPlaceholder("https://5e.tools")
-					.setValue(this.plugin.pluginSettings.fiveEtoolsBaseUrl)
-					.onChange((value) => {
-						this.plugin.pluginSettings.fiveEtoolsBaseUrl = value.trim();
-						void this.plugin.saveSettings();
-					})
-			);
-	}
 }
 
 // ─── Main Plugin ────────────────────────────────────────────────────────────
@@ -2693,16 +2602,16 @@ export default class DnDBeyondImporterPlugin extends Plugin {
 				return { max: maxHp, current: initCur, temp: initTmp, dsS: 0, dsF: 0, log: [] };
 			};
 			const saveState = (s: HPState) => this.pluginState.set(STORE_KEY, JSON.stringify(s));
-			let state = loadState();
+			const state = loadState();
 
-			const w = el.createEl("div", { cls: "dndbi-hp-widget" });
-			const hdr = w.createEl("div", { cls: "dndbi-hp-header" });
+			const w = el.createDiv({ cls: "dndbi-hp-widget" });
+			const hdr = w.createDiv({ cls: "dndbi-hp-header" });
 			hdr.setText("❤️ HP Tracker");
 
-			const barWrap = w.createEl("div", { cls: "dndbi-hp-bar-wrap" });
-			const barFill = barWrap.createEl("div", { cls: "dndbi-hp-bar-fill" });
-			const barLbl  = barWrap.createEl("div", { cls: "dndbi-hp-bar-label" });
-			const tempBadge = w.createEl("div", { cls: "dndbi-hp-temp-badge" });
+			const barWrap = w.createDiv({ cls: "dndbi-hp-bar-wrap" });
+			const barFill = barWrap.createDiv({ cls: "dndbi-hp-bar-fill" });
+			const barLbl  = barWrap.createDiv({ cls: "dndbi-hp-bar-label" });
+			const tempBadge = w.createDiv({ cls: "dndbi-hp-temp-badge" });
 
 			const dsSuccessPips: HTMLButtonElement[] = [];
 			const dsFailurePips: HTMLButtonElement[] = [];
@@ -2719,7 +2628,7 @@ export default class DnDBeyondImporterPlugin extends Plugin {
 				dsFailurePips.forEach((p, i) => { p.classList.toggle("is-filled", i < state.dsF); });
 				logEl.empty();
 				(state.log ?? []).slice(0, 20).forEach((entry) => {
-					const row = logEl.createEl("div", { cls: "dndbi-hp-log-entry" });
+					const row = logEl.createDiv({ cls: "dndbi-hp-log-entry" });
 					row.setText(entry);
 				});
 				saveState(state);
@@ -2731,7 +2640,7 @@ export default class DnDBeyondImporterPlugin extends Plugin {
 				if (state.log.length > 20) state.log.length = 20;
 			};
 
-			const dmgRow = w.createEl("div", { cls: "dndbi-hp-dmg-row" });
+			const dmgRow = w.createDiv({ cls: "dndbi-hp-dmg-row" });
 			const amtInput = dmgRow.createEl("input", {
 				cls: "dndbi-hp-amt-input",
 				attr: { type: "number", min: "0", value: "1" },
@@ -2753,7 +2662,7 @@ export default class DnDBeyondImporterPlugin extends Plugin {
 				addLog(`💚 +${n} heal → ${state.current} HP`); render();
 			});
 
-			const quickRow = w.createEl("div", { cls: "dndbi-hp-quick-row" });
+			const quickRow = w.createDiv({ cls: "dndbi-hp-quick-row" });
 			const qBtn = (lbl: string, d: number) => {
 				const b = quickRow.createEl("button", { cls: "dndbi-hp-quick-btn" });
 				b.setText(lbl);
@@ -2766,8 +2675,8 @@ export default class DnDBeyondImporterPlugin extends Plugin {
 			};
 			qBtn("−10",-10); qBtn("−5",-5); qBtn("−1",-1); qBtn("Full",0); qBtn("+1",1); qBtn("+5",5); qBtn("+10",10);
 
-			const tmpRow = w.createEl("div", { cls: "dndbi-hp-tmp-row" });
-			const tmpLbl = tmpRow.createEl("span", { cls: "dndbi-hp-tmp-label" });
+			const tmpRow = w.createDiv({ cls: "dndbi-hp-tmp-row" });
+			const tmpLbl = tmpRow.createSpan({ cls: "dndbi-hp-tmp-label" });
 			tmpLbl.setText("Temp HP:");
 			const tmpInput = tmpRow.createEl("input", {
 				cls: "dndbi-hp-tmp-input",
@@ -2785,10 +2694,10 @@ export default class DnDBeyondImporterPlugin extends Plugin {
 				state.temp=0; tmpInput.value="0"; addLog("💙 Temp HP cleared"); render();
 			});
 
-			const dsSection = w.createEl("div", { cls: "dndbi-hp-ds-section" });
-			const dsTitle = dsSection.createEl("div", { cls: "dndbi-hp-ds-title" });
+			const dsSection = w.createDiv({ cls: "dndbi-hp-ds-section" });
+			const dsTitle = dsSection.createDiv({ cls: "dndbi-hp-ds-title" });
 			dsTitle.setText("Death Saves");
-			const dsRow = dsSection.createEl("div", { cls: "dndbi-hp-ds-row" });
+			const dsRow = dsSection.createDiv({ cls: "dndbi-hp-ds-row" });
 
 			const makePips = (
 				flavour: "is-success" | "is-failure",
@@ -2796,7 +2705,7 @@ export default class DnDBeyondImporterPlugin extends Plugin {
 				get: () => number,
 				set: (n: number) => void,
 			) => {
-				const grp = dsRow.createEl("div", { cls: "dndbi-hp-ds-pip-group" });
+				const grp = dsRow.createDiv({ cls: "dndbi-hp-ds-pip-group" });
 				for (let i = 1; i <= 3; i++) {
 					const p = grp.createEl("button", { cls: `dndbi-hp-ds-pip ${flavour}` });
 					const idx = i;
@@ -2813,14 +2722,14 @@ export default class DnDBeyondImporterPlugin extends Plugin {
 				state.dsS=0; state.dsF=0; addLog("🔄 Death saves reset"); render();
 			});
 
-			const logSection = w.createEl("div", { cls: "dndbi-hp-log-section" });
-			const logHeader = logSection.createEl("div", { cls: "dndbi-hp-log-header" });
-			const logTitle = logHeader.createEl("span", { cls: "dndbi-hp-log-title" });
+			const logSection = w.createDiv({ cls: "dndbi-hp-log-section" });
+			const logHeader = logSection.createDiv({ cls: "dndbi-hp-log-header" });
+			const logTitle = logHeader.createSpan({ cls: "dndbi-hp-log-title" });
 			logTitle.setText("Change Log");
 			const clrLog = logHeader.createEl("button", { cls: "dndbi-hp-log-clr-btn" });
 			clrLog.setText("Clear");
 			clrLog.addEventListener("click", () => { state.log=[]; render(); });
-			const logEl = logSection.createEl("div", { cls: "dndbi-hp-log-list" });
+			const logEl = logSection.createDiv({ cls: "dndbi-hp-log-list" });
 
 			render();
 		});
@@ -2837,7 +2746,7 @@ export default class DnDBeyondImporterPlugin extends Plugin {
 			const rawCharId = params["charId"];
 			const charId = rawCharId && rawCharId !== "0" ? rawCharId : null;
 
-			const row = el.createEl("div", { cls: "dndbi-launcher-row" });
+			const row = el.createDiv({ cls: "dndbi-launcher-row" });
 
 			const sheetBtn = row.createEl("button", { cls: "dndbi-sheet-btn" });
 			sheetBtn.setText("⚔️ Open Interactive Character Sheet");
