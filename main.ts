@@ -808,7 +808,7 @@ function buildSpells(char: DdbCharacter): string {
 	if (spellSlots) {
 		const slots: DdbSpellSlot[] = Array.isArray(spellSlots)
 			? spellSlots
-			: Object.values(spellSlots);
+			: Object.values<DdbSpellSlot>(spellSlots);
 		const usefulSlots = slots.filter((s) => s.max);
 		if (usefulSlots.length) {
 			md += `### Spell Slots\n\n`;
@@ -1308,7 +1308,7 @@ class DiceRollerModal extends Modal {
 		const nat20s = results.filter((r: number) => r === 20).length;
 		const nat1s  = results.filter((r: number) => r === 1).length;
 
-		const freq: Record<number, number> = {};
+		const freq: Record<string, number> = {};
 		results.forEach((r: number) => {
 			freq[r] = (freq[r] ?? 0) + 1;
 		});
@@ -1966,7 +1966,7 @@ class FullCharacterSheetModal extends Modal {
 		// ════════════════════════════════════════════════════════════════════
 		const spellSlots = char.spellSlots;
 		if (spellSlots) {
-			const slots: DdbSpellSlot[] = Array.isArray(spellSlots) ? spellSlots : Object.values(spellSlots);
+			const slots: DdbSpellSlot[] = Array.isArray(spellSlots) ? spellSlots : Object.values<DdbSpellSlot>(spellSlots);
 			const usefulSlots = slots.filter((s) => s.max);
 			if (usefulSlots.length) {
 				const slotSection = this.sectionEl(mainCol, "Spell Slots");
@@ -2437,6 +2437,18 @@ class DnDBeyondSettingTab extends PluginSettingTab {
 		];
 	}
 
+	// Classic PluginSettingTab API, required for the settings tab to render on
+	// Obsidian versions before 1.13.0 (this plugin's minAppVersion is 1.12.0).
+	// Reuses the exact same `render` closures as getSettingDefinitions() above,
+	// so the two entry points can't drift out of sync.
+	display(): void {
+		const { containerEl } = this;
+		containerEl.empty();
+		for (const def of this.getSettingDefinitions()) {
+			const setting = new Setting(containerEl).setName(def.name).setDesc(def.desc);
+			def.render(setting);
+		}
+	}
 }
 
 // ─── Main Plugin ────────────────────────────────────────────────────────────
@@ -2470,13 +2482,13 @@ export default class DnDBeyondImporterPlugin extends Plugin {
 		// We wait for the metadata cache to be ready, then rebuild from frontmatter.
 		this.app.workspace.onLayoutReady(() => {
 			for (const file of this.app.vault.getMarkdownFiles()) {
-				// Obsidian types frontmatter as `any`; cast once to `Record<string, unknown>`
-				// so every fm["..."] access below is type-safe instead of unsafe `any` access.
-				const fm = this.app.metadataCache.getFileCache(file)?.frontmatter as
-					| Record<string, unknown>
-					| undefined;
+				// Obsidian's frontmatter type is already Record<string, unknown> | undefined,
+				// so a plain annotation (not an `as` cast) keeps every fm["..."] access
+				// below type-safe without an unnecessary assertion.
+				const fm: Record<string, unknown> | undefined =
+					this.app.metadataCache.getFileCache(file)?.frontmatter;
 				if (!fm?.["dndbeyond_id"]) continue;
-				const id = String(fm["dndbeyond_id"] as number | string);
+				const id = String(fm["dndbeyond_id"]);
 				if (this.charCache.has(id)) continue; // already populated (e.g. just imported)
 				// Rebuild a minimal DdbCharacter from the frontmatter values so the
 				// interactive sheet and HP tracker have all the numbers they need.
@@ -2521,7 +2533,7 @@ export default class DnDBeyondImporterPlugin extends Plugin {
 							return {
 								definition: { name: m ? m[1].trim() : trimmed },
 								level: m ? parseInt(m[2]) : level,
-							} as DdbClass;
+							};
 						});
 					})(),
 					race: {
