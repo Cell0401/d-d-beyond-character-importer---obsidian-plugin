@@ -1055,13 +1055,15 @@ class HPTrackerModal extends Modal {
 
 		const currentCtrlEl = contentEl.createEl("div", { cls: "dndbi-hpmodal-ctrl-row" });
 
-		const currentInputEl = activeDocument.createElement("input");
-		currentInputEl.className = "dndbi-hpmodal-number-input";
-		currentInputEl.type = "number";
-		currentInputEl.value = String(tracker.currentHp);
-		currentInputEl.min = "0";
-		currentInputEl.max = String(tracker.maxHp);
-		currentCtrlEl.appendChild(currentInputEl);
+		const currentInputEl = currentCtrlEl.createEl("input", {
+			cls: "dndbi-hpmodal-number-input",
+			attr: {
+				type: "number",
+				value: String(tracker.currentHp),
+				min: "0",
+				max: String(tracker.maxHp),
+			},
+		});
 		currentInputEl.addEventListener("change", () => {
 			tracker.currentHp = Math.max(0, Math.min(tracker.maxHp, Number(currentInputEl.value)));
 			updateDisplay();
@@ -1100,12 +1102,14 @@ class HPTrackerModal extends Modal {
 
 		const tempCtrlEl = contentEl.createEl("div", { cls: "dndbi-hpmodal-ctrl-row" });
 
-		const tempInputEl = activeDocument.createElement("input");
-		tempInputEl.className = "dndbi-hpmodal-number-input";
-		tempInputEl.type = "number";
-		tempInputEl.value = String(tracker.tempHp);
-		tempInputEl.min = "0";
-		tempCtrlEl.appendChild(tempInputEl);
+		const tempInputEl = tempCtrlEl.createEl("input", {
+			cls: "dndbi-hpmodal-number-input",
+			attr: {
+				type: "number",
+				value: String(tracker.tempHp),
+				min: "0",
+			},
+		});
 		tempInputEl.addEventListener("change", () => {
 			tracker.tempHp = Math.max(0, Number(tempInputEl.value));
 			updateDisplay();
@@ -1123,12 +1127,14 @@ class HPTrackerModal extends Modal {
 
 		const maxCtrlEl = contentEl.createEl("div", { cls: "dndbi-hpmodal-ctrl-row" });
 
-		const maxInputEl = activeDocument.createElement("input");
-		maxInputEl.className = "dndbi-hpmodal-number-input";
-		maxInputEl.type = "number";
-		maxInputEl.value = String(tracker.maxHp);
-		maxInputEl.min = "1";
-		maxCtrlEl.appendChild(maxInputEl);
+		const maxInputEl = maxCtrlEl.createEl("input", {
+			cls: "dndbi-hpmodal-number-input",
+			attr: {
+				type: "number",
+				value: String(tracker.maxHp),
+				min: "1",
+			},
+		});
 		maxInputEl.addEventListener("change", () => {
 			tracker.maxHp = Math.max(1, Number(maxInputEl.value));
 			tracker.currentHp = Math.min(tracker.currentHp, tracker.maxHp);
@@ -1331,10 +1337,14 @@ class DiceRollerModal extends Modal {
 
 		const blob = new Blob([csv], { type: "text/csv" });
 		const url  = URL.createObjectURL(blob);
-		const a    = activeDocument.createElement("a");
-		a.href     = url;
-		a.download = `roll-history-${new Date().toISOString().split("T")[0]}.csv`;
+		const a    = document.body.createEl("a", {
+			attr: {
+				href: url,
+				download: `roll-history-${new Date().toISOString().split("T")[0]}.csv`,
+			},
+		});
 		a.click();
+		a.remove();
 		URL.revokeObjectURL(url);
 		new Notice("History exported as CSV.", 2000);
 	}
@@ -1718,9 +1728,10 @@ class FullCharacterSheetModal extends Modal {
 		// dmg/heal row
 		const dmgRow = hpWrap.createEl("div");
 		dmgRow.addClass("dndbi-cs-dmg-row");
-		const amtInput = dmgRow.createEl("input");
-		amtInput.type = "number"; amtInput.min = "0"; amtInput.value = "1";
-		amtInput.addClass("dndbi-cs-amt-input");
+		const amtInput = dmgRow.createEl("input", {
+			cls: "dndbi-cs-amt-input",
+			attr: { type: "number", min: "0", value: "1" },
+		});
 		const getAmt = () => Math.max(0, parseInt(amtInput.value, 10) || 0);
 
 		const dmgBtn = dmgRow.createEl("button");
@@ -1759,9 +1770,10 @@ class FullCharacterSheetModal extends Modal {
 		const tmpRow = hpWrap.createEl("div");
 		tmpRow.addClass("dndbi-cs-tmp-row");
 		const tmpLbl = tmpRow.createEl("span"); tmpLbl.setText("Temp HP:"); tmpLbl.addClass("dndbi-cs-tmp-lbl");
-		const tmpInput = tmpRow.createEl("input");
-		tmpInput.type = "number"; tmpInput.min = "0"; tmpInput.value = String(hpSt.temp);
-		tmpInput.addClass("dndbi-cs-tmp-input");
+		const tmpInput = tmpRow.createEl("input", {
+			cls: "dndbi-cs-tmp-input",
+			attr: { type: "number", min: "0", value: String(hpSt.temp) },
+		});
 		const setTmpBtn = tmpRow.createEl("button"); setTmpBtn.setText("Set");
 		setTmpBtn.addClass("dndbi-cs-tmp-set-btn");
 		setTmpBtn.addEventListener("click", () => { hpSt.temp = Math.max(0, parseInt(tmpInput.value,10)||0); addHPLog(`💙 Temp HP set to ${hpSt.temp}`); renderHP(); });
@@ -2322,6 +2334,109 @@ class DnDBeyondSettingTab extends PluginSettingTab {
 		this.plugin = plugin;
 	}
 
+	// Declarative settings API (Obsidian 1.13.0+): makes these settings findable in
+	// Obsidian's in-app settings search. We use `render` (not `control`) for every
+	// entry because our settings live on `this.plugin.pluginSettings`, not the
+	// `this.plugin.settings` key the `control` shorthand auto-binds to (see the
+	// comment above the plugin class for why it's named pluginSettings). `render`
+	// hands us the row and lets us reuse the exact same Setting(...) wiring as
+	// display() below, so both paths stay behaviourally identical. Kept in sync
+	// manually with display() — see the pitfall note in the migration guide.
+	getSettingDefinitions() {
+		return [
+			{
+				name: "Output folder",
+				desc: "Vault folder where character notes are saved (leave blank for vault root).",
+				render: (setting: Setting) => {
+					setting.addText((text) =>
+						text
+							.setPlaceholder("Characters")
+							.setValue(this.plugin.pluginSettings.outputFolder)
+							.onChange((value) => {
+								this.plugin.pluginSettings.outputFolder = value;
+								void this.plugin.saveSettings();
+							})
+					);
+				},
+			},
+			{
+				name: "Include spells",
+				desc: "Import the full spell list and spell slots.",
+				render: (setting: Setting) => {
+					setting.addToggle((toggle) =>
+						toggle.setValue(this.plugin.pluginSettings.includeSpells).onChange((value) => {
+							this.plugin.pluginSettings.includeSpells = value;
+							void this.plugin.saveSettings();
+						})
+					);
+				},
+			},
+			{
+				name: "Include equipment",
+				desc: "Import the inventory / equipment table.",
+				render: (setting: Setting) => {
+					setting.addToggle((toggle) =>
+						toggle.setValue(this.plugin.pluginSettings.includeEquipment).onChange((value) => {
+							this.plugin.pluginSettings.includeEquipment = value;
+							void this.plugin.saveSettings();
+						})
+					);
+				},
+			},
+			{
+				name: "Include features & traits",
+				desc: "Import racial traits, feats and character personality traits.",
+				render: (setting: Setting) => {
+					setting.addToggle((toggle) =>
+						toggle.setValue(this.plugin.pluginSettings.includeFeatures).onChange((value) => {
+							this.plugin.pluginSettings.includeFeatures = value;
+							void this.plugin.saveSettings();
+						})
+					);
+				},
+			},
+			{
+				name: "Include backstory & notes",
+				desc: "Import character backstory and campaign notes from D&D Beyond.",
+				render: (setting: Setting) => {
+					setting.addToggle((toggle) =>
+						toggle.setValue(this.plugin.pluginSettings.includeBackstory).onChange((value) => {
+							this.plugin.pluginSettings.includeBackstory = value;
+							void this.plugin.saveSettings();
+						})
+					);
+				},
+			},
+			{
+				name: "Enable 5etools integration",
+				desc: "Fetch rich descriptions for spells, items, class features, and racial traits from your self-hosted 5etools instance. Disabled by default.",
+				render: (setting: Setting) => {
+					setting.addToggle((toggle) =>
+						toggle.setValue(this.plugin.pluginSettings.fiveEtoolsEnabled).onChange((value) => {
+							this.plugin.pluginSettings.fiveEtoolsEnabled = value;
+							void this.plugin.saveSettings();
+						})
+					);
+				},
+			},
+			{
+				name: "5etools base URL",
+				desc: "Base URL of your self-hosted 5etools instance (e.g. https://5e.tools or http://localhost:5000). Only used when the integration is enabled.",
+				render: (setting: Setting) => {
+					setting.addText((text) =>
+						text
+							.setPlaceholder("https://5e.tools")
+							.setValue(this.plugin.pluginSettings.fiveEtoolsBaseUrl)
+							.onChange((value) => {
+								this.plugin.pluginSettings.fiveEtoolsBaseUrl = value.trim();
+								void this.plugin.saveSettings();
+							})
+					);
+				},
+			},
+		];
+	}
+
 	display(): void {
 		const { containerEl } = this;
 		containerEl.empty();
@@ -2446,7 +2561,11 @@ export default class DnDBeyondImporterPlugin extends Plugin {
 		// We wait for the metadata cache to be ready, then rebuild from frontmatter.
 		this.app.workspace.onLayoutReady(() => {
 			for (const file of this.app.vault.getMarkdownFiles()) {
-				const fm = this.app.metadataCache.getFileCache(file)?.frontmatter;
+				// Obsidian types frontmatter as `any`; cast once to `Record<string, unknown>`
+				// so every fm["..."] access below is type-safe instead of unsafe `any` access.
+				const fm = this.app.metadataCache.getFileCache(file)?.frontmatter as
+					| Record<string, unknown>
+					| undefined;
 				if (!fm?.["dndbeyond_id"]) continue;
 				const id = String(fm["dndbeyond_id"] as number | string);
 				if (this.charCache.has(id)) continue; // already populated (e.g. just imported)
@@ -2467,7 +2586,7 @@ export default class DnDBeyondImporterPlugin extends Plugin {
 				// stays undefined (the sheet guards all optional accesses).
 				const char: DdbCharacter = {
 					id: Number(id),
-					name: String(fm["name"] ?? ""),
+					name: (fm["name"] as string | undefined) ?? "",
 					avatarUrl: fm["avatar_url"] as string | undefined,
 					baseHitPoints: Number(fm["hp_max"] ?? 10),
 					removedHitPoints: Number(fm["hp_max"] ?? 10) - Number(fm["hp_current"] ?? Number(fm["hp_max"] ?? 10)),
@@ -2486,7 +2605,7 @@ export default class DnDBeyondImporterPlugin extends Plugin {
 					modifiers: {},
 					classes: (() => {
 						// Parse "Fighter 5 / Wizard 3" style class string back to DdbClass[]
-						const classStr = String(fm["class"] ?? "");
+						const classStr = (fm["class"] as string | undefined) ?? "";
 						return classStr.split("/").map((part) => {
 							const trimmed = part.trim();
 							const m = trimmed.match(/^(.+?)\s+(\d+)$/);
@@ -2497,10 +2616,10 @@ export default class DnDBeyondImporterPlugin extends Plugin {
 						});
 					})(),
 					race: {
-						fullName: String(fm["race"] ?? ""),
+						fullName: (fm["race"] as string | undefined) ?? "",
 						weightSpeeds: { normal: { walk: Number(fm["speed"] ?? 30) } },
 					},
-					background: { definition: { name: String(fm["background"] ?? "") } },
+					background: { definition: { name: (fm["background"] as string | undefined) ?? "" } },
 					alignmentId: undefined,
 					inventory: [],
 					feats: [],
@@ -2510,14 +2629,14 @@ export default class DnDBeyondImporterPlugin extends Plugin {
 			}
 		});
 
-		this.addSettingTab(new DnDBeyondSettingTab(this.app, this as unknown as DnDBeyondSettingTab["plugin"]));
+		this.addSettingTab(new DnDBeyondSettingTab(this.app, this));
 
 		this.addRibbonIcon("user-plus", "Import D&D Beyond character", () => {
-			new ImportModal(this.app, this as unknown as ImportModal["plugin"]).open();
+			new ImportModal(this.app, this).open();
 		});
 
 		this.addRibbonIcon("dice", "Open Dice Roller", () => {
-			new DiceRollerModal(this.app, this as unknown as DiceRollerModal["plugin"]).open();
+			new DiceRollerModal(this.app, this).open();
 		});
 
 
@@ -2526,7 +2645,7 @@ export default class DnDBeyondImporterPlugin extends Plugin {
 			id: "import-dndbeyond-character",
 			name: "Import D&D Beyond character",
 			callback: () => {
-				new ImportModal(this.app, this as unknown as ImportModal["plugin"]).open();
+				new ImportModal(this.app, this).open();
 			},
 		});
 
@@ -2534,7 +2653,7 @@ export default class DnDBeyondImporterPlugin extends Plugin {
 			id: "open-dice-roller",
 			name: "Open Dice Roller",
 			callback: () => {
-				new DiceRollerModal(this.app, this as unknown as DiceRollerModal["plugin"]).open();
+				new DiceRollerModal(this.app, this).open();
 			},
 		});
 
@@ -2542,12 +2661,12 @@ export default class DnDBeyondImporterPlugin extends Plugin {
 			id: "open-hp-tracker",
 			name: "Open HP Tracker (legacy)",
 			callback: () => {
-				const firstId = this.charCache.keys().next().value as string | undefined;
+				const firstId = this.charCache.keys().next().value;
 				if (!firstId) {
 					new Notice("Import a D&D Beyond character first.", 3000);
 					return;
 				}
-				new HPTrackerModal(this.app, this as unknown as HPTrackerModal["plugin"], firstId).open();
+				new HPTrackerModal(this.app, this, firstId).open();
 			},
 		});
 
@@ -2613,10 +2732,10 @@ export default class DnDBeyondImporterPlugin extends Plugin {
 			};
 
 			const dmgRow = w.createEl("div", { cls: "dndbi-hp-dmg-row" });
-			const amtInput = activeDocument.createElement("input");
-			amtInput.className = "dndbi-hp-amt-input";
-			amtInput.type = "number"; amtInput.min = "0"; amtInput.value = "1";
-			dmgRow.appendChild(amtInput);
+			const amtInput = dmgRow.createEl("input", {
+				cls: "dndbi-hp-amt-input",
+				attr: { type: "number", min: "0", value: "1" },
+			});
 			const getAmt = () => Math.max(0, parseInt(amtInput.value, 10) || 0);
 
 			const dmgBtn = dmgRow.createEl("button", { cls: "dndbi-hp-dmg-btn" });
@@ -2650,10 +2769,10 @@ export default class DnDBeyondImporterPlugin extends Plugin {
 			const tmpRow = w.createEl("div", { cls: "dndbi-hp-tmp-row" });
 			const tmpLbl = tmpRow.createEl("span", { cls: "dndbi-hp-tmp-label" });
 			tmpLbl.setText("Temp HP:");
-			const tmpInput = activeDocument.createElement("input");
-			tmpInput.className = "dndbi-hp-tmp-input";
-			tmpInput.type = "number"; tmpInput.min = "0"; tmpInput.value = String(state.temp);
-			tmpRow.appendChild(tmpInput);
+			const tmpInput = tmpRow.createEl("input", {
+				cls: "dndbi-hp-tmp-input",
+				attr: { type: "number", min: "0", value: String(state.temp) },
+			});
 			const setTmpBtn = tmpRow.createEl("button", { cls: "dndbi-hp-tmp-set-btn" });
 			setTmpBtn.setText("Set");
 			setTmpBtn.addEventListener("click", () => {
@@ -2679,9 +2798,7 @@ export default class DnDBeyondImporterPlugin extends Plugin {
 			) => {
 				const grp = dsRow.createEl("div", { cls: "dndbi-hp-ds-pip-group" });
 				for (let i = 1; i <= 3; i++) {
-					const p = activeDocument.createElement("button");
-					p.className = `dndbi-hp-ds-pip ${flavour}`;
-					grp.appendChild(p);
+					const p = grp.createEl("button", { cls: `dndbi-hp-ds-pip ${flavour}` });
 					const idx = i;
 					p.addEventListener("click", () => { set(get() >= idx ? idx - 1 : idx); render(); });
 					pips.push(p);
@@ -2734,7 +2851,7 @@ export default class DnDBeyondImporterPlugin extends Plugin {
 					new Notice("Import the character first so the sheet has data to display.", 3000);
 					return;
 				}
-				new FullCharacterSheetModal(this.app, this as unknown as FullCharacterSheetModal["plugin"], cached.char, cached.stats, cached.pb).open();
+				new FullCharacterSheetModal(this.app, this, cached.char, cached.stats, cached.pb).open();
 			});
 
 			const refreshBtn = row.createEl("button", { cls: "dndbi-refresh-btn" });
@@ -2833,7 +2950,12 @@ export default class DnDBeyondImporterPlugin extends Plugin {
 		// Re-import support: match on dndbeyond_id in front matter, not file name,
 		// so renaming the note doesn't break future refreshes.
 		const existing: TFile | undefined = this.app.vault.getMarkdownFiles().find(
-			(f: TFile) => this.app.metadataCache.getFileCache(f)?.frontmatter?.["dndbeyond_id"] === char.id
+			(f: TFile) => {
+				const fm = this.app.metadataCache.getFileCache(f)?.frontmatter as
+					| Record<string, unknown>
+					| undefined;
+				return fm?.["dndbeyond_id"] === char.id;
+			}
 		);
 
 		try {
