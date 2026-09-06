@@ -2488,7 +2488,12 @@ export default class DnDBeyondImporterPlugin extends Plugin {
 				const fm: Record<string, unknown> | undefined =
 					this.app.metadataCache.getFileCache(file)?.frontmatter;
 				if (!fm?.["dndbeyond_id"]) continue;
-				const id = String(fm["dndbeyond_id"]);
+				const rawId = fm["dndbeyond_id"];
+				const id =
+					typeof rawId === "string" ? rawId :
+					typeof rawId === "number" ? String(rawId) :
+					null;
+				if (id === null) continue;
 				if (this.charCache.has(id)) continue; // already populated (e.g. just imported)
 				// Rebuild a minimal DdbCharacter from the frontmatter values so the
 				// interactive sheet and HP tracker have all the numbers they need.
