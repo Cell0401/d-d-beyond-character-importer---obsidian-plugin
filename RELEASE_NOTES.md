@@ -1,8 +1,16 @@
 # Release Notes
 
+## v1.1.4
+
+### Bug Fixes
+- **TypeScript Overloads & Types:** Fixed unsafe Object.values and Object.entries calls by adding explicit generic types/record schemas, and removed redundant as type assertions.
+- **TSConfig:** Updated lib to include ES2018 to support Promise.prototype.finally() type resolution.
+- **Backwards Compatibility:** Added a display() method to DnDBeyondSettingTab so settings render on Obsidian 1.12.0.
+- **Initiative Tracker Compatibility:** Fixed NaN roll errors by adding a calculated modifier field (Dexterity bonus) and renaming hp_max to hp so frontmatter directly aligns with Initiative Tracker's schema.
+
 ## v1.1.3
 
-### Bug fixes
+### Bug Fixes
 - Sheet won't open after restart. 'charCache' is wiped on restart. Added onLayoutReady in onload() to rebuild it from existing notes' frontmatter.
 - Hp bar fix in the Interactive character sheet.
 
@@ -16,14 +24,14 @@
 - **Styles added**. The plugin is from now on compatible with themes.
 - Refresh button
 
-### Bug fixes
+### Bug Fixes
 - The refresh button is now disabled (with an explanatory tooltip) on notes that don't have a D&D Beyond character ID, instead of attempting — and silently failing — an import with a meaningless fallback ID.
 - `importCharacter()` previously swallowed its own errors and returned silently, so a calling function had no way to know an import had failed. It now re-throws after showing its Notice, so the new refresh button (and any future callers) can detect and react to failures.
 - Replaced `setAttribute("disabled", "true")` with the standard `button.disabled = true` on the refresh button and the 5etools fetch button, which is the simpler and more correct way to toggle button state.
 - Moved the character-sheet launcher buttons' styling out of inline `style.cssText` strings and into `styles.css` (`.dndbi-launcher-row`, `.dndbi-sheet-btn`, `.dndbi-refresh-btn`), improving readability and maintainability.
 - Fixed a broken `buildSavingThrows()` helper that referenced `key`, `subType`, and `cells` outside of any enclosing scope — restored the missing `.map()` callback so saving throws render correctly again.
 
-### New contributors
+### New Contributors
 
 <p align="center">
   <a href="https://github.com/mstelz">
@@ -39,7 +47,7 @@ Thank you for contributing to this project! 🎉
 
 ## v1.1.1
 
-### Bug fixes
+### Bug Fixes
 - Fixed README title to match the plugin name in `manifest.json` (`DnD Beyond Importer`) — required by the Obsidian community plugin checker.
 - Replaced all `sessionStorage` usage with an in-memory `Map` on the plugin instance, using Obsidian's own data lifecycle instead of browser storage APIs. Affected: HP tracker widget, spell slot pips, equipment toggle state, and session notes in the Interactive Character Sheet.
 
@@ -47,7 +55,7 @@ Thank you for contributing to this project! 🎉
 
 ## v1.1.0
 
-### New features
+### New Features✨
 - **Interactive Character Sheet** — a full visual character sheet opens as an overlay when you click **⚔️ Open Interactive Character Sheet** at the top of any character note. The Markdown note remains untouched underneath.
   - **HP Tracker** — damage/heal buttons, quick ±1/5/10 adjustments, temp HP, color-coded bar, death save pips, change log
   - **Ability Scores** — click any score card to roll that ability check (animated d20 result + toast notification)
@@ -89,7 +97,7 @@ Thank you for contributing to this project! 🎉
 
 ## v1.0.4
 
-### Bug fixes
+### Bug Fixes
 - Removed damage dice fallback for homebrew/custom weapons that have no damage defined. Items such as utility ranged weapons now correctly show ATK-only — no DMG value in the character note and no **🎲 DMG** button in the roll sheet.
 - Fixed custom/homebrew weapons (those without `categoryId: 1`) not appearing in the **Actions & Attacks** section at all. They are now detected via the presence of `weaponBehaviors` and included correctly.
 - Added missing **## Actions & Attacks** table to the imported character note. Previously attack actions were only visible in the roll sheet modal; they are now written into the Markdown note with columns for ATK bonus, damage, range, and properties.
@@ -100,14 +108,14 @@ Thank you for contributing to this project! 🎉
 
 ## v1.0.3
 
-### New features
+### New Features✨
 - **Roll Sheet from any character note** — open the roll sheet for a character at any time, not just immediately after import.
   - A new **🎲 dices ribbon icon** appears in the left sidebar. Click it while a character note is open to instantly load that character's roll sheet.
   - New command palette entry: **D&D Beyond Importer: Open Roll Sheet for active character note** — same behaviour, keyboard-accessible.
   - The character's data is re-used from an in-session cache if it was already imported this session; otherwise it is fetched live from the D&D Beyond API using the `dndbeyond_id` stored in the note's YAML front matter.
   - Multiple characters are now cached independently — switching between notes and opening their roll sheets works without re-importing.
 
-### Bug fixes
+### Bug Fixes
 - Removed unused `martialProf` variable (TypeScript warning resolved).
 - Removed unused `totalStr` variable in `roll20` method (TypeScript warning resolved).
 
@@ -115,7 +123,7 @@ Thank you for contributing to this project! 🎉
 
 ## v1.0.2
 
-### New features
+### New Features✨
 - **Character Roll Sheet** — after importing a character, a roll sheet modal opens automatically with dice roll buttons for every stat.
   - **Initiative** — roll d20 + DEX modifier directly from the sheet.
   - **Ability Checks** — one roll button per ability score (STR/DEX/CON/INT/WIS/CHA).
@@ -125,14 +133,14 @@ Thank you for contributing to this project! 🎉
 - Roll history now logs the modifier and total alongside the raw die result (e.g. `d20(14)+5 = 19`).
 - Re-open the roll sheet any time via command palette: **D&D Beyond Importer: Open Character Roll Sheet**.
 
-### Bug fixes
+### Bug Fixes
 - Removed plugin name from settings tab heading (Obsidian plugin guideline compliance).
 
 ---
 
 ## v1.0.1
 
-### Bug fixes
+### Bug Fixes
 - Removed plugin name from settings tab heading to comply with Obsidian plugin guidelines.
 
 ### Notes
@@ -141,7 +149,7 @@ Thank you for contributing to this project! 🎉
 
 ---
 
-## v1.0.0 — Initial release
+## v1.0.0 — Initial Release
 
 - Import any public D&D Beyond character sheet as a formatted Markdown note.
 - Full character sheet: ability scores, saving throws, skills, HP, AC, speed, proficiency bonus.
