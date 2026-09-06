@@ -2877,9 +2877,8 @@ export default class DnDBeyondImporterPlugin extends Plugin {
 		// so renaming the note doesn't break future refreshes.
 		const existing: TFile | undefined = this.app.vault.getMarkdownFiles().find(
 			(f: TFile) => {
-				const fm = this.app.metadataCache.getFileCache(f)?.frontmatter as
-					| Record<string, unknown>
-					| undefined;
+				const fm: Record<string, unknown> | undefined =
+					this.app.metadataCache.getFileCache(f)?.frontmatter;
 				return fm?.["dndbeyond_id"] === char.id;
 			}
 		);
