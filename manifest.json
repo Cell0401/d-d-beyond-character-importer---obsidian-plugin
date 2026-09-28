@@ -1,11 +1,9 @@
 {
-  "id": "dndbeyond-importer",
-  "name": "DnD Beyond Importer",
+  "id": "dnd-character-sheet",
+  "name": "D&D Character Sheet",
   "version": "1.1.4",
   "minAppVersion": "1.12.0",
-  "description": "Import public D&D Beyond characters as beautifully formatted notes into your vault.",
-  "author": "Jktaisa",
-  "authorUrl": "https://github.com/Webcreator3478",
-  "fundingUrl": "https://ko-fi.com/jktaisa",
+  "description": "A lightweight interactive D&D character sheet for Obsidian with D&D Beyond integration.",
+  "author": "Cell0401",
   "isDesktopOnly": false
 }
