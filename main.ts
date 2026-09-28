@@ -9,6 +9,8 @@ import {
 	Setting,
 	TFile,
 } from "obsidian";
+import { fetchDdbCharacter } from "./src/ddb/api";
+import { toCharacterDiagnostic } from "./src/ddb/diagnostic";
 
 interface DnDBeyondImporterSettings {
 	outputFolder: string;
@@ -989,6 +991,58 @@ class ImportModal extends Modal {
 	private async submit() {
 		this.close();
 		await this.plugin.importCharacter(this.urlValue.trim());
+	}
+
+	onClose() {
+		this.contentEl.empty();
+	}
+}
+
+
+class DdbDiagnosticModal extends Modal {
+	private inputValue = "";
+
+	onOpen() {
+		const { contentEl } = this;
+		contentEl.empty();
+		contentEl.createEl("h2", { text: "Test D&D Beyond connection" });
+		contentEl.createEl("p", {
+			text: "Paste a public D&D Beyond character URL or numeric ID.",
+			cls: "setting-item-description",
+		});
+
+		const input = contentEl.createEl("input", {
+			type: "text",
+			placeholder: "D&D Beyond character URL or ID",
+			cls: "dndbi-import-input",
+		});
+		input.addEventListener("input", (event) => {
+			this.inputValue = (event.target as HTMLInputElement).value;
+		});
+		input.addEventListener("keydown", (event) => {
+			if (event.key === "Enter") void this.submit();
+		});
+
+		const button = contentEl.createEl("button", { text: "Test connection", cls: "mod-cta" });
+		button.addEventListener("click", () => void this.submit());
+		window.setTimeout(() => input.focus(), 50);
+	}
+
+	private async submit() {
+		try {
+			const response = await fetchDdbCharacter<any>(this.inputValue);
+			const character = toCharacterDiagnostic(response.data);
+			this.contentEl.empty();
+			this.contentEl.createEl("h2", { text: "✓ D&D Beyond connection successful" });
+			this.contentEl.createEl("p", { text: character.name });
+			this.contentEl.createEl("p", {
+				text: `Level ${character.totalLevel} ${character.classes.join(" / ")} • ${character.race}`,
+			});
+			this.contentEl.createEl("p", { text: `Character ID: ${character.id}` });
+		} catch (error) {
+			const message = error instanceof Error ? error.message : String(error);
+			new Notice(`D&D Beyond test failed: ${message}`, 6000);
+		}
 	}
 
 	onClose() {
@@ -2572,6 +2626,15 @@ export default class DnDBeyondImporterPlugin extends Plugin {
 			name: "Import D&D Beyond character",
 			callback: () => {
 				new ImportModal(this.app, this).open();
+			},
+		});
+
+
+		this.addCommand({
+			id: "test-dndbeyond-connection",
+			name: "Test D&D Beyond connection",
+			callback: () => {
+				new DdbDiagnosticModal(this.app).open();
 			},
 		});
 
